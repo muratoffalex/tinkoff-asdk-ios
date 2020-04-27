@@ -278,34 +278,14 @@ static ASDKPaymentFormStarter * __paymentFormStarterInstance = nil;
 + (BOOL)isPayWithAppleAvailable
 {
 	BOOL canMakePayments = [PKPaymentAuthorizationViewController canMakePayments];
-	BOOL canMakePaymentsUsingNetworks = NO;
- 
-	if (NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_9_0)
-	{
-		canMakePaymentsUsingNetworks = [PKPaymentAuthorizationViewController canMakePaymentsUsingNetworks:[ASDKPaymentFormStarter payWithAppleSupportedNetworks]];
-	}
+	BOOL canMakePaymentsUsingNetworks = canMakePaymentsUsingNetworks = [PKPaymentAuthorizationViewController canMakePaymentsUsingNetworks:[ASDKPaymentFormStarter payWithAppleSupportedNetworks]];
 
 	return canMakePayments && canMakePaymentsUsingNetworks;
 }
 
 + (NSArray<PKPaymentNetwork> *)payWithAppleSupportedNetworks
 {
-	NSArray<PKPaymentNetwork> *result = nil;
-	
-	if (NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_9_0)
-	{
-		result = @[//PKPaymentNetworkAmex,
-				   //PKPaymentNetworkChinaUnionPay,
-				   //PKPaymentNetworkDiscover,
-				   //PKPaymentNetworkInterac,
-				   PKPaymentNetworkMasterCard,
-				   //PKPaymentNetworkPrivateLabel,
-				   PKPaymentNetworkVisa];
-	}
-	else
-	{
-		result = @[PKPaymentNetworkMasterCard, PKPaymentNetworkVisa];
-	}
+	NSArray<PKPaymentNetwork> *result =  @[PKPaymentNetworkMasterCard, PKPaymentNetworkVisa];
 
 	return result;
 }
@@ -330,7 +310,6 @@ static ASDKPaymentFormStarter * __paymentFormStarterInstance = nil;
 								cancelled:(void (^)(void))onCancelled
 									error:(void (^)(ASDKAcquringSdkError *error))onError
 {
-	///////////////
 	self.onSuccess = onSuccess;
 	self.onError = onError;
 	self.onCancelled = onCancelled;
@@ -372,12 +351,6 @@ static ASDKPaymentFormStarter * __paymentFormStarterInstance = nil;
 			paymentRequest.billingContact = billingContact;
 			paymentRequest.requiredBillingAddressFields = addressFieldBilling;
 			
-			//
-			//PKAddressField shippingEditableFields = PKAddressFieldNone;
-			//if (shippingContact.postalAddress) { shippingEditableFields |= PKAddressFieldPostalAddress; }
-			//if (shippingContact.name) { shippingEditableFields |= PKAddressFieldName; }
-			//if (shippingContact.emailAddress) { shippingEditableFields |= PKAddressFieldEmail; }
-			//if (shippingContact.phoneNumber) { shippingEditableFields |= PKAddressFieldPhone; }
 			paymentRequest.requiredShippingAddressFields = shippingEditableFields;
 			paymentRequest.shippingContact = shippingContact;
 			
@@ -390,6 +363,90 @@ static ASDKPaymentFormStarter * __paymentFormStarterInstance = nil;
 			{
 				self.presentingViewControllerApplePay = presentingViewController;
 				[self.presentingViewControllerApplePay presentViewController:viewController animated:YES completion:^{}];
+			}
+			else
+			{
+				[ASDKPaymentFormStarter resetSharedInstance];
+				self.onError(nil);
+				
+			}
+		}
+		failure:^(ASDKAcquringSdkError *error) {
+			[ASDKPaymentFormStarter resetSharedInstance];
+			self.onError(error);
+		}
+	 ];
+}
+
+- (void)payUsingApplePayFromViewController:(UIViewController *)presentingViewController
+									amount:(NSNumber *)amount // цена товара
+								   orderId:(NSString *)orderId // идентификатор товара
+							   description:(NSString *)description // описание
+							   customerKey:(NSString *)customerKey // идетинификатор пользователя (для сохранеиня платежей)
+								 sendEmail:(BOOL)sendEmail // отправлять чек на почту
+									 email:(NSString *)email
+						   appleMerchantId:(NSString *)appleMerchantId // берётся из Target->Capabilities->ApplePay Merchant IDs
+						   shippingMethods:(NSArray<PKShippingMethod *> *)shippingMethods //доставка и стоимость доставки
+						   shippingContact:(PKContact *)shippingContact //кому доставить и адрес доставки
+					shippingEditableFields:(NSSet<PKContactField> *)shippingEditableFields //какие поля можно показывать и редактировть на форме оплаты ApplePay
+								 recurrent:(BOOL)recurrent
+					 additionalPaymentData:(NSDictionary *)additionalPaymentData //JSON объект содержащий дополнительные параметры, например @{@"Email" : @"a@test.ru"}
+							   receiptData:(NSDictionary *)receiptData // JSON объект с данными чека, обязательно должен быть объект Items в который вложены позиции чека Email и Taxation - Система налогообложения, значения: osn, usn_income, usn_income_outcome, envd, esn, или patent
+								 shopsData:(NSArray *)shopsData
+						 shopsReceiptsData:(NSArray *)shopsReceiptsData
+								   success:(void (^)(ASDKPaymentInfo *paymentInfo))onSuccess
+								 cancelled:(void (^)(void))onCancelled
+									 error:(void (^)(ASDKAcquringSdkError *error))onError
+{
+	self.onSuccess = onSuccess;
+	self.onError = onError;
+	self.onCancelled = onCancelled;
+
+	[self.acquiringSdk initWithAmount:[NSNumber numberWithDouble: 100 * amount.doubleValue]
+							  orderId:orderId
+						  description:nil
+							  payForm:nil
+						  customerKey:customerKey
+							recurrent:recurrent
+				additionalPaymentData:additionalPaymentData
+						  receiptData:receiptData
+							shopsData:shopsData
+					shopsReceiptsData:shopsReceiptsData
+							 location:ASDKLocalized.sharedInstance.localeIdentifier
+		success:^(ASDKInitResponse *response){
+			self.paymentIdForApplePay = response.paymentId;
+			
+			PKPaymentRequest *paymentRequest = [PKPaymentRequest new];
+			paymentRequest.merchantIdentifier = appleMerchantId;
+			paymentRequest.countryCode = @"RU";
+			paymentRequest.currencyCode = @"RUB";
+			paymentRequest.supportedNetworks = [ASDKPaymentFormStarter payWithAppleSupportedNetworks];
+			paymentRequest.merchantCapabilities = PKMerchantCapability3DS|PKMerchantCapabilityCredit|PKMerchantCapabilityDebit;
+			//paymentSummaryItems
+			NSMutableArray *paymentSummaryItems = [NSMutableArray new];//
+			[paymentSummaryItems addObject: [PKPaymentSummaryItem summaryItemWithLabel:description amount: [NSDecimalNumber decimalNumberWithDecimal: [amount decimalValue]]]];
+			[paymentSummaryItems addObjectsFromArray: shippingMethods];
+			
+			paymentRequest.paymentSummaryItems = paymentSummaryItems;
+						
+			if (sendEmail == YES)
+			{
+				paymentRequest.requiredBillingContactFields = [NSSet setWithObjects:PKContactFieldEmailAddress, nil];
+			}
+            paymentRequest.requiredBillingContactFields = shippingEditableFields;
+			PKContact *billingContact = [[PKContact alloc] init];
+			billingContact.emailAddress = email;
+			paymentRequest.billingContact = billingContact;
+
+			paymentRequest.shippingContact = shippingContact;
+
+			PKPaymentAuthorizationViewController *viewController = [[PKPaymentAuthorizationViewController alloc] initWithPaymentRequest: paymentRequest];
+			viewController.delegate = self;
+			
+			if (viewController)
+			{
+				self.presentingViewControllerApplePay = presentingViewController;
+				[self.presentingViewControllerApplePay presentViewController: viewController animated: YES completion:^{}];
 			}
 			else
 			{
@@ -512,10 +569,13 @@ static ASDKPaymentFormStarter * __paymentFormStarterInstance = nil;
 						 [vc setChargeError:YES];
 						 [vc setChargeErrorPaymentId:[errorResponse.dictionary objectForKey:@"PaymentId"]];
 						 [vc needSetupCardRequisitesCellForCVC];
-
+                         
+                         ASDKNavigationController *nc = [[ASDKNavigationController alloc] initWithRootViewController:vc];
+                         [nc setModalPresentationStyle:self.designConfiguration.modalPresentationStyle];
+                         
 						 if (paymentConfirm)
 						 {
-							 paymentConfirm(vc);
+							 paymentConfirm(nc);
 						 }
 					 }
 				 } errorBlock:^(ASDKAcquringSdkError *error) {
@@ -538,6 +598,35 @@ static ASDKPaymentFormStarter * __paymentFormStarterInstance = nil;
 
 - (void)paymentAuthorizationViewController:(PKPaymentAuthorizationViewController *)controller
 					   didAuthorizePayment:(PKPayment *)payment
+								   handler:(void (^)(PKPaymentAuthorizationResult *result))completion API_AVAILABLE(ios(11.0), watchos(4.0))
+{
+	if (completion)
+	{
+		NSString *encryptedPaymentData = [payment.token.paymentData base64EncodedStringWithOptions:0];
+
+		[self.acquiringSdk finishAuthorizeWithPaymentId:self.paymentIdForApplePay
+								   encryptedPaymentData:encryptedPaymentData
+											   cardData:nil
+											  infoEmail:payment.billingContact.emailAddress
+												   data:nil
+													 ip:nil
+												success:^(ASDKThreeDsData *data, ASDKPaymentInfo *paymentInfo, ASDKPaymentStatus status) {
+													self.onCompleteSuccessPaymentInfo = paymentInfo;
+													self.onCompleteStatus = status;
+													PKPaymentAuthorizationResult *result = [[PKPaymentAuthorizationResult alloc] initWithStatus:PKPaymentAuthorizationStatusSuccess errors:nil];
+													completion(result);
+												}
+												failure:^(ASDKAcquringSdkError *error) {
+													self.onCompleteError = error;
+													self.onCompleteStatus = ASDKPaymentStatus_UNKNOWN;
+													PKPaymentAuthorizationResult *result = [[PKPaymentAuthorizationResult alloc] initWithStatus:PKPaymentAuthorizationStatusFailure errors:nil];
+													completion(result);
+												}];
+	}
+}
+
+- (void)paymentAuthorizationViewController:(PKPaymentAuthorizationViewController *)controller
+					   didAuthorizePayment:(PKPayment *)payment
 								completion:(void (^)(PKPaymentAuthorizationStatus status))completion
 {
 	if (completion)
@@ -548,6 +637,8 @@ static ASDKPaymentFormStarter * __paymentFormStarterInstance = nil;
 								   encryptedPaymentData:encryptedPaymentData
 											   cardData:nil
 											  infoEmail:payment.billingContact.emailAddress
+												   data:nil
+													 ip:nil
 												success:^(ASDKThreeDsData *data, ASDKPaymentInfo *paymentInfo, ASDKPaymentStatus status) {
 													self.onCompleteSuccessPaymentInfo = paymentInfo;
 													self.onCompleteStatus = status;
@@ -563,7 +654,7 @@ static ASDKPaymentFormStarter * __paymentFormStarterInstance = nil;
 
 - (void)paymentAuthorizationViewControllerDidFinish:(PKPaymentAuthorizationViewController *)controller
 {
-	[self.presentingViewControllerApplePay dismissViewControllerAnimated:YES completion:^{
+	[controller dismissViewControllerAnimated:YES completion:^{
 		if (self.onCompleteSuccessPaymentInfo != nil && self.onCompleteError == nil && (self.onCompleteStatus == ASDKPaymentStatus_CONFIRMED || self.onCompleteStatus == ASDKPaymentStatus_AUTHORIZED))
 		{
 			self.onSuccess(self.onCompleteSuccessPaymentInfo);
@@ -580,15 +671,58 @@ static ASDKPaymentFormStarter * __paymentFormStarterInstance = nil;
 		}
 		else
 		{
-			NSString *message = @"Payment state error";
 			NSString *details = [NSString stringWithFormat:@"%@", self.onCompleteSuccessPaymentInfo];
-			ASDKAcquringSdkError *error = [ASDKAcquringSdkError errorWithMessage:message details:details code:0];
+			ASDKAcquringSdkError *error = [ASDKAcquringSdkError errorWithMessage:nil details:details code:0];
 			self.onError(error);
 			self.onCompleteError = nil;
 		}
 		
 		[ASDKPaymentFormStarter resetSharedInstance];
 	}];
+}
+
+- (void)presentAttachFormFromViewController:(UIViewController *)presentingViewController
+                                  formTitle:(NSString *)title
+                                 formHeader:(NSString *)header
+                                description:(NSString *)description
+                                      email:(NSString *)email
+                              cardCheckType:(NSString *)cardCheckType
+                                customerKey:(NSString *)customerKey
+                             additionalData:(NSDictionary *)data
+                  isDissmissAfterCompletion:(BOOL)isDissmissAfterCompletion
+                                    success:(void (^)(ASDKResponseAttachCard *result))onSuccess
+                                  cancelled:(void (^)(void))onCancelled
+                                      error:(void (^)(ASDKAcquringSdkError *error))onError
+{
+    [self prepareDesign];
+    
+    //    ASDKLoopViewController *viewController = [[ASDKLoopViewController alloc] initWithAddCardRequestKey:@"1" acquiringSdk:self.acquiringSdk];
+    
+    ASDKAttachCardViewController *viewController = [[ASDKAttachCardViewController alloc] initWithCardCheckType:cardCheckType
+                                                                                                     formTitle:(NSString *)title
+                                                                                                    formHeader:(NSString *)header
+                                                                                                   description:(NSString *)description
+                                                                                                         email:(NSString *)email
+                                                                                                   customerKey:(NSString *)customerKey
+                                                                                                additionalData:(NSDictionary *)data
+                                                                                                       success:^(ASDKResponseAttachCard *result) {
+                                                                                                           [ASDKPaymentFormStarter resetSharedInstance];
+                                                                                                           onSuccess(result);
+                                                                                                       } cancelled:^{
+                                                                                                           [ASDKPaymentFormStarter resetSharedInstance];
+                                                                                                           onCancelled();
+                                                                                                       } error:^(ASDKAcquringSdkError *error) {
+                                                                                                           [ASDKPaymentFormStarter resetSharedInstance];
+                                                                                                           onError(error);
+                                                                                                       }];
+    viewController.isDissmissAfterCompletion = isDissmissAfterCompletion;
+    
+    viewController.acquiringSdk = self.acquiringSdk;
+    
+    ASDKNavigationController *nc = [[ASDKNavigationController alloc] initWithRootViewController:viewController];
+    [nc setModalPresentationStyle:self.designConfiguration.modalPresentationStyle];
+    [ASDKCardsListDataController cardsListDataControllerWithAcquiringSdk:self.acquiringSdk customerKey:customerKey];
+    [presentingViewController presentViewController:nc animated:YES completion:nil];
 }
 
 - (void)presentAttachFormFromViewController:(UIViewController *)presentingViewController
@@ -600,37 +734,21 @@ static ASDKPaymentFormStarter * __paymentFormStarterInstance = nil;
 								customerKey:(NSString *)customerKey
 							 additionalData:(NSDictionary *)data
 									success:(void (^)(ASDKResponseAttachCard *result))onSuccess
-								  cancelled:(void (^)(void))onCancelled
-									  error:(void (^)(ASDKAcquringSdkError *error))onError
+                                  cancelled:(void (^)(void))onCancelled
+                                      error:(void (^)(ASDKAcquringSdkError *error))onError
 {
-	[self prepareDesign];
-
-//	ASDKLoopViewController *viewController = [[ASDKLoopViewController alloc] initWithAddCardRequestKey:@"1" acquiringSdk:self.acquiringSdk];
-	
-	ASDKAttachCardViewController *viewController = [[ASDKAttachCardViewController alloc] initWithCardCheckType:cardCheckType
-																									 formTitle:(NSString *)title
-																									formHeader:(NSString *)header
-																								   description:(NSString *)description
-																										 email:(NSString *)email
-																								   customerKey:(NSString *)customerKey
-																								additionalData:(NSDictionary *)data
-																									   success:^(ASDKResponseAttachCard *result) {
-																										   [ASDKPaymentFormStarter resetSharedInstance];
-																										   onSuccess(result);
-																									   } cancelled:^{
-																										   [ASDKPaymentFormStarter resetSharedInstance];
-																										   onCancelled();
-																									   } error:^(ASDKAcquringSdkError *error) {
-																										   [ASDKPaymentFormStarter resetSharedInstance];
-																										   onError(error);
-																									   }];
-
-	viewController.acquiringSdk = self.acquiringSdk;
-	
-	ASDKNavigationController *nc = [[ASDKNavigationController alloc] initWithRootViewController:viewController];
-	[nc setModalPresentationStyle:self.designConfiguration.modalPresentationStyle];
-	[ASDKCardsListDataController cardsListDataControllerWithAcquiringSdk:self.acquiringSdk customerKey:customerKey];
-	[presentingViewController presentViewController:nc animated:YES completion:nil];
+    [self presentAttachFormFromViewController:presentingViewController
+                                    formTitle:title
+                                   formHeader:header
+                                  description:description
+                                        email:email
+                                cardCheckType:cardCheckType
+                                  customerKey:customerKey
+                               additionalData:data
+                    isDissmissAfterCompletion:YES
+                                      success:onSuccess
+                                    cancelled:onCancelled
+                                        error:onError];
 }
 
 @end

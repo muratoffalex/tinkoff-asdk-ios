@@ -112,8 +112,8 @@
 		   needShowConfirm:(void (^)(UIViewController *vc))paymentConfirm
 					 error:(void (^)(ASDKAcquringSdkError *error))onError;
 
-+ (BOOL)isPayWithAppleAvailable NS_AVAILABLE_IOS(9_0);
-+ (NSArray<PKPaymentNetwork> *)payWithAppleSupportedNetworks NS_AVAILABLE_IOS(9_0);
++ (BOOL)isPayWithAppleAvailable;
++ (NSArray<PKPaymentNetwork> *)payWithAppleSupportedNetworks;
 
 /*!
  * @bref оплата с помощью ApplePay, онлайн документация https://oplata.tinkoff.ru/landing/develop/documentation/Init
@@ -135,9 +135,7 @@
  *
  * @param shippingContact - кому доставить и адрес доставки
  *
- * @param shippingEditableFields - какие поля можно показывать и редактировть на форме оплаты Apple Pay, например
- * PKAddressFieldNone - ни одного (и не показывать) 
- * PKAddressFieldPostalAddress|PKAddressFieldName|PKAddressFieldEmail|PKAddressFieldPhone - Адрес ФИО Email и Телефон
+ * @param shippingEditableFields - какие поля можно показывать и редактировть на форме оплаты Apple Pay
  *
  * @param additionalPaymentData - JSON объект содержащий дополнительные параметры в виде “ключ”:”значение”. 
  * Данные параметры будут переданы на страницу оплаты (в случае ее кастомизации). 
@@ -173,7 +171,27 @@
 						shopsReceiptsData:(NSArray *)shopsReceiptsData
 								  success:(void (^)(ASDKPaymentInfo *paymentInfo))onSuccess
 								cancelled:(void (^)(void))onCancelled
-									error:(void (^)(ASDKAcquringSdkError *error))onError NS_AVAILABLE_IOS(9_0);
+									error:(void (^)(ASDKAcquringSdkError *error))onError API_DEPRECATED("PKAddressField deprecated. Use buyUsingApplePayAmount with PKContactField and -requiredShippingContactFields / -requiredBillingContactFields", ios(8.0, 11.0), watchos(3.0, 4.0));
+
+- (void)payUsingApplePayFromViewController:(UIViewController *)presentingViewController
+									amount:(NSNumber *)amount // цена товара
+								   orderId:(NSString *)orderId // идентификатор товара
+							   description:(NSString *)description // описание
+							   customerKey:(NSString *)customerKey // идетинификатор пользователя (для сохранеиня платежей)
+								 sendEmail:(BOOL)sendEmail // отправлять чек на почту
+									 email:(NSString *)email
+						   appleMerchantId:(NSString *)appleMerchantId // берётся из Target->Capabilities->ApplePay Merchant IDs
+						   shippingMethods:(NSArray<PKShippingMethod *> *)shippingMethods //доставка и стоимость доставки
+						   shippingContact:(PKContact *)shippingContact //кому доставить и адрес доставки
+					shippingEditableFields:(NSSet<PKContactField> *)shippingEditableFields //какие поля можно показывать и редактировть на форме оплаты ApplePay
+								 recurrent:(BOOL)recurrent
+					 additionalPaymentData:(NSDictionary *)additionalPaymentData //JSON объект содержащий дополнительные параметры, например @{@"Email" : @"a@test.ru"}
+							   receiptData:(NSDictionary *)receiptData // JSON объект с данными чека, обязательно должен быть объект Items в который вложены позиции чека Email и Taxation - Система налогообложения, значения: osn, usn_income, usn_income_outcome, envd, esn, или patent
+								 shopsData:(NSArray *)shopsData
+						 shopsReceiptsData:(NSArray *)shopsReceiptsData
+								   success:(void (^)(ASDKPaymentInfo *paymentInfo))onSuccess
+								 cancelled:(void (^)(void))onCancelled
+									 error:(void (^)(ASDKAcquringSdkError *error))onError API_AVAILABLE(ios(11.0), watchos(4.0));
 
 - (void)checkStatusTransaction:(NSString *)paymentId
 					   success:(void (^)(ASDKPaymentStatus status))onSuccess
@@ -214,5 +232,18 @@
 									success:(void (^)(ASDKResponseAttachCard *result))onSuccess
 								  cancelled:(void (^)(void))onCancelled
 									  error:(void (^)(ASDKAcquringSdkError *error))onError;
+
+- (void)presentAttachFormFromViewController:(UIViewController *)presentingViewController
+                                  formTitle:(NSString *)title //Заголовок экрана
+                                 formHeader:(NSString *)header // заголовок для пояснения зачем надо привязывать карту
+                                description:(NSString *)description //описание зачем надо привязывать карту
+                                      email:(NSString *)email //
+                              cardCheckType:(NSString *)cardCheckType //описание возможных значений в ASDKCard.h
+                                customerKey:(NSString *)customerKey // идетинификатор пользователя (для сохранеиня платежей и карт)
+                             additionalData:(NSDictionary *)data //JSON объект содержащий дополнительные параметры, например @{@"Phone" : @"+71234567890"}
+                  isDissmissAfterCompletion:(BOOL)isDissmissAfterCompletion //Скрывать ли экран при окончании добавления карты автоматически или нет
+                                    success:(void (^)(ASDKResponseAttachCard *result))onSuccess
+                                  cancelled:(void (^)(void))onCancelled
+                                      error:(void (^)(ASDKAcquringSdkError *error))onError;
 
 @end

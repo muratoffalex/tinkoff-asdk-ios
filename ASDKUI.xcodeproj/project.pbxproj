@@ -28,6 +28,7 @@
 		2C6E6BA61F94CA0E00B345B9 /* ASDKLoopViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C6E6BA41F94CA0E00B345B9 /* ASDKLoopViewController.m */; };
 		2C76290D21A2BFD100514437 /* ASDKLocalized.h in Headers */ = {isa = PBXBuildFile; fileRef = 2C76290B21A2BFD100514437 /* ASDKLocalized.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2C76290E21A2BFD100514437 /* ASDKLocalized.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C76290C21A2BFD100514437 /* ASDKLocalized.m */; };
+		2C83A62F235DD22100F22255 /* ASDK3DSViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C83A62D235DD22100F22255 /* ASDK3DSViewController.xib */; };
 		2C98637F1F6984B500FBC729 /* ASDKEmptyTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2C98637C1F6984B500FBC729 /* ASDKEmptyTableViewCell.h */; };
 		2C9863801F6984B500FBC729 /* ASDKEmptyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C98637D1F6984B500FBC729 /* ASDKEmptyTableViewCell.m */; };
 		2C9863811F6984B500FBC729 /* ASDKEmptyTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C98637E1F6984B500FBC729 /* ASDKEmptyTableViewCell.xib */; };
@@ -62,7 +63,6 @@
 		94AA136B1C68D32F006FBC7E /* UIView+AutoLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 94AA13691C68D32F006FBC7E /* UIView+AutoLayout.m */; };
 		94C5BCBA1C6B3E0300542BC8 /* ASDK3DSViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 94C5BCB71C6B3E0300542BC8 /* ASDK3DSViewController.h */; };
 		94C5BCBB1C6B3E0300542BC8 /* ASDK3DSViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94C5BCB81C6B3E0300542BC8 /* ASDK3DSViewController.m */; };
-		94C5BCBC1C6B3E0300542BC8 /* ASDK3DSViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 94C5BCB91C6B3E0300542BC8 /* ASDK3DSViewController.xib */; };
 		94C86A051C6B2E5100046F0E /* ASDKUIImages.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94C86A001C6B2E5100046F0E /* ASDKUIImages.xcassets */; };
 		94C86A061C6B2E5100046F0E /* ASDKLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 94C86A021C6B2E5100046F0E /* ASDKLocalizable.strings */; };
 		94C86A1C1C6B304900046F0E /* ASDKPaymentFormStarter.h in Headers */ = {isa = PBXBuildFile; fileRef = 94C86A0B1C6B304900046F0E /* ASDKPaymentFormStarter.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -141,6 +141,7 @@
 		2C6E6BA41F94CA0E00B345B9 /* ASDKLoopViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ASDKLoopViewController.m; sourceTree = "<group>"; };
 		2C76290B21A2BFD100514437 /* ASDKLocalized.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ASDKLocalized.h; sourceTree = "<group>"; };
 		2C76290C21A2BFD100514437 /* ASDKLocalized.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ASDKLocalized.m; sourceTree = "<group>"; };
+		2C83A62D235DD22100F22255 /* ASDK3DSViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ASDK3DSViewController.xib; sourceTree = "<group>"; };
 		2C98637C1F6984B500FBC729 /* ASDKEmptyTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASDKEmptyTableViewCell.h; sourceTree = "<group>"; };
 		2C98637D1F6984B500FBC729 /* ASDKEmptyTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASDKEmptyTableViewCell.m; sourceTree = "<group>"; };
 		2C98637E1F6984B500FBC729 /* ASDKEmptyTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ASDKEmptyTableViewCell.xib; sourceTree = "<group>"; };
@@ -178,7 +179,6 @@
 		94AA13691C68D32F006FBC7E /* UIView+AutoLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+AutoLayout.m"; sourceTree = "<group>"; };
 		94C5BCB71C6B3E0300542BC8 /* ASDK3DSViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASDK3DSViewController.h; sourceTree = "<group>"; };
 		94C5BCB81C6B3E0300542BC8 /* ASDK3DSViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASDK3DSViewController.m; sourceTree = "<group>"; };
-		94C5BCB91C6B3E0300542BC8 /* ASDK3DSViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ASDK3DSViewController.xib; sourceTree = "<group>"; };
 		94C86A001C6B2E5100046F0E /* ASDKUIImages.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ASDKUIImages.xcassets; sourceTree = "<group>"; };
 		94C86A031C6B2E5100046F0E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/ASDKLocalizable.strings; sourceTree = "<group>"; };
 		94C86A041C6B2E5100046F0E /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/ASDKLocalizable.strings; sourceTree = "<group>"; };
@@ -374,7 +374,7 @@
 			children = (
 				94C5BCB71C6B3E0300542BC8 /* ASDK3DSViewController.h */,
 				94C5BCB81C6B3E0300542BC8 /* ASDK3DSViewController.m */,
-				94C5BCB91C6B3E0300542BC8 /* ASDK3DSViewController.xib */,
+				2C83A62D235DD22100F22255 /* ASDK3DSViewController.xib */,
 			);
 			path = 3DSController;
 			sourceTree = "<group>";
@@ -655,12 +655,12 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = ASDK;
-				LastUpgradeCheck = 0910;
+				LastUpgradeCheck = 1100;
 				ORGANIZATIONNAME = "TCS Bank";
 				TargetAttributes = {
 					8316724E1C64798800533D85 = {
 						CreatedOnToolsVersion = 7.2;
-						LastSwiftMigration = 0830;
+						LastSwiftMigration = 1100;
 					};
 					8316725A1C6479A200533D85 = {
 						CreatedOnToolsVersion = 7.2;
@@ -669,7 +669,7 @@
 			};
 			buildConfigurationList = 831672491C64798800533D85 /* Build configuration list for PBXProject "ASDKUI" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
@@ -711,12 +711,12 @@
 				2C9863811F6984B500FBC729 /* ASDKEmptyTableViewCell.xib in Resources */,
 				BEDEFF8E1C75A6780026D454 /* ASDKNumberCell.xib in Resources */,
 				83E156641C720A31000BBD57 /* ASDKLoaderViewController.xib in Resources */,
+				2C83A62F235DD22100F22255 /* ASDK3DSViewController.xib in Resources */,
 				CA82FD211C70ED49005FD294 /* ASDKPaymentFormHeaderCell.xib in Resources */,
 				94C86A061C6B2E5100046F0E /* ASDKLocalizable.strings in Resources */,
 				CA82FD281C70F811005FD294 /* ASDKPaymentFormSummCell.xib in Resources */,
 				94C86A221C6B304900046F0E /* ASDKEmailCell.xib in Resources */,
 				83E1567F1C737439000BBD57 /* ASDKFooterCell.xib in Resources */,
-				94C5BCBC1C6B3E0300542BC8 /* ASDK3DSViewController.xib in Resources */,
 				BEDEFF971C75FC330026D454 /* ASDKDeleteCell.xib in Resources */,
 				BE7E02771C733D0F00DF6230 /* ASDKCardCell.xib in Resources */,
 				BE7E02831C7354F900DF6230 /* ASDKAddNewCardCell.xib in Resources */,
@@ -827,12 +827,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -867,7 +869,6 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "arm64 armv7 armv7s";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -886,12 +887,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -921,7 +924,6 @@
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "arm64 armv7 armv7s";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -932,7 +934,7 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				CURRENT_PROJECT_VERSION = 1.0.0;
+				CURRENT_PROJECT_VERSION = 78;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -945,14 +947,14 @@
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = ASDKUI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MARKETING_VERSION = 1.5.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = ru.tcsbank.ASDKUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				VALID_ARCHS = "arm64 armv7 armv7s i386 x86_64";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -961,7 +963,7 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				CURRENT_PROJECT_VERSION = 1.0.0;
+				CURRENT_PROJECT_VERSION = 78;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -974,13 +976,13 @@
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = ASDKUI/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MARKETING_VERSION = 1.5.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = ru.tcsbank.ASDKUI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				VALID_ARCHS = "arm64 armv7 armv7s i386 x86_64";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

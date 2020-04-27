@@ -19,9 +19,9 @@
 #import "ASDK3DSViewController.h"
 #import <ASDKCore/ASDKApiKeys.h>
 #import <ASDKCore/ASDKAcquiringSdk.h>
-#import "ASDKLoaderViewController.h"
+#import <ASDKCore/ASDKUtilsRequest.h>
 
-#define kASDKSubmit3DSAuthorization @"Submit3DSAuthorization"
+#import "ASDKLoaderViewController.h"
 
 #import "ASDKNavigationController.h"
 
@@ -29,17 +29,20 @@
 
 #import "ASDKBarButtonItem.h"
 
+#import <WebKit/WebKit.h>
+
+
 typedef NS_ENUM(NSInteger, CheckStateType)
 {
 	CheckStateType_payment,
 	CheckStateType_addCardState
 };
 
-@interface ASDK3DSViewController () <UIWebViewDelegate>
+@interface ASDK3DSViewController () <WKUIDelegate, WKNavigationDelegate>
 
 @property(nonatomic, strong) ASDKAcquiringSdk *acquiringSdk;
 
-@property (nonatomic, weak) IBOutlet UIWebView *webView;
+@property (nonatomic) WKWebView *webView;
 
 @property (nonatomic, strong) NSString *paymentId;
 @property (nonatomic, strong) NSString *addCardRequestKey;
@@ -51,14 +54,11 @@ typedef NS_ENUM(NSInteger, CheckStateType)
 @property (nonatomic, strong) void (^onError)(ASDKAcquringSdkError *error);
 
 @property (nonatomic, assign) CheckStateType checkStateType;
+@property (nonatomic, copy) NSString *termURL;
 
 @end
 
 @implementation ASDK3DSViewController
-
-#pragma mark - Getters
-
-#pragma mark - Init
 
 - (void)dealloc
 {
@@ -112,39 +112,110 @@ typedef NS_ENUM(NSInteger, CheckStateType)
 
 #pragma mark - ViewController Lifecycle
 
+- (void)setupWebView
+{
+	WKWebViewConfiguration *wkWebConfig = [WKWebViewConfiguration new];
+
+	[wkWebConfig.preferences setJavaScriptEnabled:YES];
+	[wkWebConfig.preferences setJavaScriptCanOpenWindowsAutomatically:YES];
+	
+    self.webView = [[WKWebView alloc] initWithFrame: CGRectZero configuration: wkWebConfig];
+    self.webView.navigationDelegate = self;
+    self.webView.allowsBackForwardNavigationGestures = YES;
+
+	[self.view addSubview: self.webView];
+
+    self.webView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    NSLayoutConstraint *topConstraint = [NSLayoutConstraint constraintWithItem: self.webView
+                                 attribute: NSLayoutAttributeTop
+                                 relatedBy: NSLayoutRelationEqual
+                                    toItem: self.view
+                                 attribute: NSLayoutAttributeTop
+                                multiplier: 1.0
+                                  constant: 0];
+    
+    NSLayoutConstraint *bottomConstraint = [NSLayoutConstraint constraintWithItem: self.webView
+                                 attribute: NSLayoutAttributeBottom
+                                 relatedBy: NSLayoutRelationEqual
+                                    toItem: self.view
+                                 attribute: NSLayoutAttributeBottom
+                                multiplier: 1.0
+                                  constant: 0];
+    
+    NSLayoutConstraint *leftConstraint = [NSLayoutConstraint constraintWithItem: self.webView
+                                 attribute: NSLayoutAttributeLeft
+                                 relatedBy: NSLayoutRelationEqual
+                                    toItem: self.view
+                                 attribute: NSLayoutAttributeLeft
+                                multiplier: 1.0
+                                  constant: 0];
+    
+    NSLayoutConstraint *rightConstraint = [NSLayoutConstraint constraintWithItem: self.webView
+                                 attribute: NSLayoutAttributeRight
+                                 relatedBy: NSLayoutRelationEqual
+                                    toItem: self.view
+                                 attribute: NSLayoutAttributeRight
+                                multiplier: 1.0
+                                  constant: 0];
+    
+    NSArray *wb_constraints = @[ topConstraint,
+								 bottomConstraint,
+								 leftConstraint,
+								 rightConstraint
+								];
+    
+    [self.view addConstraints: wb_constraints];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self.view setBackgroundColor:[UIColor whiteColor]];
+    [self setupWebView];
+  
+    if (@available(iOS 13.0, *)) {
+        [self.view setBackgroundColor:[UIColor systemBackgroundColor]];
+    } else {
+        [self.view setBackgroundColor:[UIColor whiteColor]];
+    }
     
     self.navigationItem.leftBarButtonItem = [[ASDKBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel3DS)];
     
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:self.threeDsData.ACSUrl];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL: [NSURL URLWithString: self.threeDsData.acsUrl]];
 	request.timeoutInterval = _acquiringSdk.apiRequestsTimeoutInterval;
-    [request setHTTPMethod:@"POST"];
-    NSString *dataString = [self stringFromParameters:[self parameters]];
-
-    NSData *postData = [dataString dataUsingEncoding:NSUTF8StringEncoding];
-    
-    [request setHTTPBody:postData];
+	[request setAllHTTPHeaderFields:[ASDKUtilsRequest defaultHTTPHeaders]];
+	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    [request setHTTPMethod: @"POST"];
 	
+	if (self.threeDsData.tdsServerTransId != nil && self.threeDsData.acsTransId != nil)
+	{
+		self.termURL = [NSString stringWithFormat:@"%@%@", [self.acquiringSdk domainPath_v2], kASDKSubmit3DSAuthorization];
+		NSString *paramsString = [NSString stringWithFormat:@"{\"threeDSServerTransID\":\"%@\",\"acsTransID\":\"%@\",\"messageVersion\":\"%@\",\"challengeWindowSize\":\"05\",\"messageType\":\"CReq\"}",
+								  self.threeDsData.tdsServerTransId, self.threeDsData.acsTransId, self.threeDsData.threeDSVersion];
+		
+		NSData *plainData = [paramsString dataUsingEncoding:NSUTF8StringEncoding];
+		NSString *postString = [NSString stringWithFormat:@"%@", [plainData base64EncodedStringWithOptions:0]];
+		NSData *postData = [[NSString stringWithFormat:@"creq=%@", postString] dataUsingEncoding: NSUTF8StringEncoding];
+		
+		[request setHTTPBody: postData];
+	}
+	else if (self.threeDsData.paReq != nil && self.threeDsData.MD != nil)
+	{
+		self.termURL = [NSString stringWithFormat:@"%@%@", [self.acquiringSdk domainPath], kASDKSubmit3DSAuthorization];
+		
+		NSMutableDictionary *params = [NSMutableDictionary dictionary];
+		[params setValue:self.threeDsData.paReq forKey:kASDKPaReq];
+		[params setValue:self.threeDsData.MD forKey:kASDKMD];
+		[params setValue:self.termURL forKey:kASDKTermUrl];
+		
+		NSString *dataString = [self stringFromParameters:params];
+		
+		NSData *postData = [dataString dataUsingEncoding: NSUTF8StringEncoding];
+		[request setHTTPBody: postData];
+	}
+		
 	[[NSNotificationCenter defaultCenter] postNotificationName:ASDKNotificationShowLoader object:nil];
-	
-    [self.webView loadRequest:request];
-}
-
-- (NSString *)termUrl
-{
-    return [NSString stringWithFormat:@"%@%@",[self.acquiringSdk domainPath],kASDKSubmit3DSAuthorization];
-}
-
-- (NSDictionary *)parameters
-{
-    NSString *termUrl = [self termUrl];
-    
-    return @{kASDKPaReq : self.threeDsData.paReq,
-             kASDKMD : self.threeDsData.MD,
-             kASDKTermUrl : termUrl};
+	[self.webView loadRequest:request];
 }
 
 - (NSString *)stringFromParameters:(NSDictionary *)parameters
@@ -171,51 +242,70 @@ typedef NS_ENUM(NSInteger, CheckStateType)
 }
 
 
-#pragma mark - UIWebViewDelegate
+#pragma mark - WKNavigationDelegate
 
-- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+- (void)webView:(WKWebView *)webView didFinishNavigation:(null_unspecified WKNavigation *)navigation
 {
-    NSString *urlString = request.URL.absoluteString;
-    
-    if ([urlString rangeOfString:@"cancel.do"].location != NSNotFound)
-    {
-        [self cancel3DS];
-        
-        return NO;
-    }
-    
-    return YES;
-}
+	if (self.webView == webView)
+	{
+		[self.webView evaluateJavaScript:@"document.baseURI" completionHandler:^(id _Nullable value, NSError * _Nullable error) {
+			if (error == nil)
+			{
+				NSString *termUrl = (NSString *)value;
+				if ([termUrl rangeOfString:@"cancel.do"].location != NSNotFound)
+				{
+					[self cancel3DS];
+				}
+				else if ([termUrl rangeOfString:self.termURL].location != NSNotFound)
+				{
+					[self.webView evaluateJavaScript:@"document.getElementsByTagName('pre')[0].innerHTML" completionHandler:^(id _Nullable value, NSError * _Nullable error) {
+						NSString *responce = (NSString *)value;
+						if (responce != nil)
+						{
+							NSData *data = [responce dataUsingEncoding:NSUTF8StringEncoding];
+							NSError *jsonError;
+							NSMutableDictionary *responseJSON = [NSJSONSerialization JSONObjectWithData:data
+																								options:kNilOptions
+																								  error:&jsonError];
+							
+							ASDKAcquiringResponse *result = [[ASDKAcquiringResponse alloc] initWithDictionary: responseJSON];
+							
+							if (result.success == true && [result.errorCode integerValue] == 0)
+							{
+								switch (self.checkStateType) {
+									case CheckStateType_payment:
+										[self checkPaymentState];
+										break;
 
-- (void)webViewDidFinishLoad:(UIWebView *)webView
-{
-	[[NSNotificationCenter defaultCenter] postNotificationName:ASDKNotificationHideLoader object:nil];
-	
-    if ([webView.request.URL.absoluteString isEqualToString:[self termUrl]])
-    {
-		switch (self.checkStateType) {
-			case CheckStateType_payment:
-				[self checkPaymentState];
-				break;
-				
-			default:
-				[self checkAddCardState];
-				break;
-		}
-    }
-}
+									default:
+										[self checkAddCardState];
+										break;
+								}
+							}
+							else
+							{
+								[self closeSelfWithCompletion:^{
+									if (self.onError)
+									{
+										NSString *errorMessage = result.message;
+										NSString *errorDetails = result.details == nil ? @"3ds checking error" : result.details;
+										NSInteger errorCode = result.errorCode == nil ? 0 : [result.errorCode integerValue];
+										
+										ASDKAcquringSdkError *error = [ASDKAcquringSdkError errorWithMessage: errorMessage
+																									 details: errorDetails
+																										code: errorCode];
+										self.onError(error);
+									}
+								}];
+							}
+						}
+					}];
+				}
+			}
+		}];
 
-- (void)webView:(UIWebView *)webView didFailLoadWithError:(nonnull NSError *)error
-{
-    [[NSNotificationCenter defaultCenter] postNotificationName:ASDKNotificationHideLoader object:nil];
-    
-    [self  closeSelfWithCompletion:^
-     {
-         if (self.onError)
-         {
-             self.onError([ASDKAcquringSdkError acquiringErrorWithError:error]);
-         }
-     }];
+		[[NSNotificationCenter defaultCenter] postNotificationName:ASDKNotificationHideLoader object:nil];
+	}
 }
 
 - (void)cancel3DS
@@ -242,11 +332,11 @@ typedef NS_ENUM(NSInteger, CheckStateType)
     
     [[NSNotificationCenter defaultCenter] postNotificationName:ASDKNotificationShowLoader object:nil];
     
-    [self.acquiringSdk getStateWithPaymentId:self.paymentId success:^(ASDKPaymentInfo *paymentInfo, ASDKPaymentStatus status){
+    [self.acquiringSdk getStateWithPaymentId:self.paymentId success:^(ASDKPaymentInfo *paymentInfo, ASDKPaymentStatus status) {
          [[NSNotificationCenter defaultCenter] postNotificationName:ASDKNotificationHideLoader object:nil];
          
          [self closeSelfWithCompletion:^{
-              if (status == ASDKPaymentStatus_CONFIRMED || status == ASDKPaymentStatus_AUTHORIZED)
+              if (status == ASDKPaymentStatus_CONFIRMED || status == ASDKPaymentStatus_AUTHORIZED || status == ASDKPaymentStatus_3DS_CHECKED)
               {
                   if (self.onSuccess)
                   {
@@ -255,16 +345,18 @@ typedef NS_ENUM(NSInteger, CheckStateType)
               }
               else
               {
-                  NSString *message = @"Payment state error";
-                  NSString *details = [NSString stringWithFormat:@"%@",paymentInfo];
-                  
-                  ASDKAcquringSdkError *stateError = [ASDKAcquringSdkError errorWithMessage:message
-                                                                                    details:details
-                                                                                       code:0];
+				  ASDKAcquiringResponse *result = [[ASDKAcquiringResponse alloc] initWithDictionary: paymentInfo.dictionary];
+				  NSString *errorMessage = result.message;
+				  NSString *errorDetails = result.details == nil ? [NSString stringWithFormat: @"%@", paymentInfo] : result.details;
+				  NSInteger errorCode = result.errorCode == nil ? 0 : [result.errorCode integerValue];
+				  
+				  ASDKAcquringSdkError *error = [ASDKAcquringSdkError errorWithMessage: errorMessage
+																			   details: errorDetails
+																				  code: errorCode];
                   
                   if (self.onError)
                   {
-                      self.onError(stateError);
+                      self.onError(error);
                   }
               }
           }];
@@ -273,8 +365,7 @@ typedef NS_ENUM(NSInteger, CheckStateType)
      {
          [[NSNotificationCenter defaultCenter] postNotificationName:ASDKNotificationHideLoader object:nil];
          
-         [self closeSelfWithCompletion:^
-          {
+         [self closeSelfWithCompletion:^{
               if (self.onError)
               {
                   self.onError(error);
@@ -300,14 +391,17 @@ typedef NS_ENUM(NSInteger, CheckStateType)
 			}
 			else
 			{
-				NSString *message = @"AddCard state error";
-				NSString *details = [NSString stringWithFormat:@"%@", response.message];
+				NSString *errorMessage = response.message;
+				NSString *errorDetails = response.details == nil ?  @"AddCard state error" : response.details;
+				NSInteger errorCode = response.errorCode == nil ? 0 : [response.errorCode integerValue];
 				
-				ASDKAcquringSdkError *stateError = [ASDKAcquringSdkError errorWithMessage:message details:details code:0];
+				ASDKAcquringSdkError *error = [ASDKAcquringSdkError errorWithMessage: errorMessage
+																			 details: errorDetails
+																				code: errorCode];
 				
 				if (self.onError)
 				{
-					self.onError(stateError);
+					self.onError(error);
 				}
 			}
 		}];

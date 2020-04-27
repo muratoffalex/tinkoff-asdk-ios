@@ -1,7 +1,3 @@
-//
-//  ASDKThreeDsData.h
-//  ASDKCore
-//
 // Copyright (c) 2016 TCS Bank
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,24 +11,25 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+//
 
+#import "ASDKResponseCheck3dsVersion.h"
 
+@implementation ASDKResponseCheck3dsVersion
 
-#import <Foundation/Foundation.h>
-#import "ASDKBaseObject.h"
+- (NSString *)threeDSVersion
+{
+	return [_dictionary objectForKey: @"Version"];
+}
 
-@interface ASDKThreeDsData : ASDKBaseObject
+- (NSString *)tdsServerTransID
+{
+	return [_dictionary objectForKey: @"TdsServerTransID"];
+}
 
-@property (nonatomic, copy) NSString *threeDSVersion;
-
-// 1.X
-@property (nonatomic, copy) NSString *MD;
-@property (nonatomic, copy) NSString *paReq;
-
-// 2.X
-@property (nonatomic, copy) NSString *acsUrl;
-@property (nonatomic, copy) NSString *acsTransId;
-@property (nonatomic, copy) NSString *tdsServerTransId;
-@property (nonatomic) BOOL fallbackOnTdsV1;
+- (NSString *)threeDSMethodURL
+{
+	return [_dictionary objectForKey: @"ThreeDSMethodURL"];
+}
 
 @end

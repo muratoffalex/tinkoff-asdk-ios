@@ -3,10 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C83A63A235DD74900F22255 /* ASDKlocalizableRu.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2C83A639235DD74900F22255 /* ASDKlocalizableRu.strings */; };
+		2CA5873C2359E798000AC124 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2CA5873B2359E798000AC124 /* Assets.xcassets */; };
 		2CEF638E1F54377C00C368AE /* TransactionDetailTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CEF63851F54377C00C368AE /* TransactionDetailTableViewCell.m */; };
 		2CEF638F1F54377C00C368AE /* TransactionDetailTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CEF63861F54377C00C368AE /* TransactionDetailTableViewCell.xib */; };
 		2CEF63901F54377C00C368AE /* TransactionHistoryModelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CEF63881F54377C00C368AE /* TransactionHistoryModelController.m */; };
@@ -18,7 +20,6 @@
 		83871B8D1C6DF29C00D69603 /* DetailInfoTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83871B8C1C6DF29C00D69603 /* DetailInfoTableViewController.xib */; };
 		83871B911C6E0C3100D69603 /* ShopCartTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83871B901C6E0C3100D69603 /* ShopCartTableViewController.xib */; };
 		83871B951C6E112400D69603 /* PayController.m in Sources */ = {isa = PBXBuildFile; fileRef = 83871B941C6E112400D69603 /* PayController.m */; };
-		94251AE91C6C899E00B5FE2B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94251ADB1C6C899E00B5FE2B /* Assets.xcassets */; };
 		94251AEA1C6C899E00B5FE2B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 94251ADE1C6C899E00B5FE2B /* AppDelegate.m */; };
 		94251AEC1C6C899E00B5FE2B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 94251AE31C6C899E00B5FE2B /* ViewController.m */; };
 		94251AEE1C6C899E00B5FE2B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 94251AE61C6C899E00B5FE2B /* main.m */; };
@@ -62,6 +63,8 @@
 
 /* Begin PBXFileReference section */
 		01788A6283865E9E86DA0E68 /* Pods-ASDKSampleApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ASDKSampleApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-ASDKSampleApp/Pods-ASDKSampleApp.release.xcconfig"; sourceTree = "<group>"; };
+		2C83A639235DD74900F22255 /* ASDKlocalizableRu.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = ASDKlocalizableRu.strings; sourceTree = "<group>"; };
+		2CA5873B2359E798000AC124 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2CEF63841F54377C00C368AE /* TransactionDetailTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransactionDetailTableViewCell.h; sourceTree = "<group>"; };
 		2CEF63851F54377C00C368AE /* TransactionDetailTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransactionDetailTableViewCell.m; sourceTree = "<group>"; };
 		2CEF63861F54377C00C368AE /* TransactionDetailTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TransactionDetailTableViewCell.xib; sourceTree = "<group>"; };
@@ -82,7 +85,6 @@
 		83871B931C6E112400D69603 /* PayController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PayController.h; sourceTree = "<group>"; };
 		83871B941C6E112400D69603 /* PayController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PayController.m; sourceTree = "<group>"; };
 		83E156691C721F26000BBD57 /* LocalConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocalConstants.h; sourceTree = "<group>"; };
-		94251ADB1C6C899E00B5FE2B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		94251ADD1C6C899E00B5FE2B /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		94251ADE1C6C899E00B5FE2B /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		94251AE11C6C899E00B5FE2B /* ASDKTestKeys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASDKTestKeys.h; sourceTree = "<group>"; };
@@ -239,8 +241,9 @@
 		94251ADA1C6C899E00B5FE2B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				2C83A639235DD74900F22255 /* ASDKlocalizableRu.strings */,
+				2CA5873B2359E798000AC124 /* Assets.xcassets */,
 				94F109591C6DDFB70043410D /* books.json */,
-				94251ADB1C6C899E00B5FE2B /* Assets.xcassets */,
 				BEDEFF561C74B2A00026D454 /* Localizable.strings */,
 			);
 			path = Resources;
@@ -388,7 +391,6 @@
 				831672841C6486A500533D85 /* Frameworks */,
 				831672851C6486A500533D85 /* Resources */,
 				831672A51C64878A00533D85 /* Embed Frameworks */,
-				A11A4A4A9DD47BEE00292CE2 /* [CP] Embed Pods Frameworks */,
 				57600297A2546A01FB72C740 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
@@ -407,8 +409,8 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = "";
-				LastUpgradeCheck = 0910;
-				ORGANIZATIONNAME = "TCS Bank";
+				LastUpgradeCheck = 1100;
+				ORGANIZATIONNAME = "Tinkoff Bank";
 				TargetAttributes = {
 					831672861C6486A500533D85 = {
 						CreatedOnToolsVersion = 7.2;
@@ -426,8 +428,8 @@
 				};
 			};
 			buildConfigurationList = 831672821C6486A500533D85 /* Build configuration list for PBXProject "ASDKSampleApp" */;
-			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			compatibilityVersion = "Xcode 10.0";
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				Base,
@@ -453,15 +455,16 @@
 				83871B8D1C6DF29C00D69603 /* DetailInfoTableViewController.xib in Resources */,
 				94F1095A1C6DDFB70043410D /* books.json in Resources */,
 				C3AAB1411DAFE40000C64972 /* InfoPlist.strings in Resources */,
+				2CA5873C2359E798000AC124 /* Assets.xcassets in Resources */,
 				C316661D1DAF7BCB00BA6AB8 /* TableViewCellSegmentedControl.xib in Resources */,
 				94251B1E1C6CB8BF00B5FE2B /* ShopCartCell.xib in Resources */,
 				94251AF61C6C89F600B5FE2B /* LaunchScreen.storyboard in Resources */,
 				94251B331C6CD2B500B5FE2B /* BookItemCell.xib in Resources */,
 				94251B291C6CC6C500B5FE2B /* PaymentSuccessViewController.xib in Resources */,
 				2CEF63921F54377C00C368AE /* TransactionHistoryViewController.xib in Resources */,
-				94251AE91C6C899E00B5FE2B /* Assets.xcassets in Resources */,
 				C3AAB1401DAFE3FC00C64972 /* Localizable.strings in Resources */,
 				BEF535721C72091D00935A15 /* AboutViewController.xib in Resources */,
+				2C83A63A235DD74900F22255 /* ASDKlocalizableRu.strings in Resources */,
 				83871B911C6E0C3100D69603 /* ShopCartTableViewController.xib in Resources */,
 				2CEF638F1F54377C00C368AE /* TransactionDetailTableViewCell.xib in Resources */,
 			);
@@ -475,14 +478,16 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ASDKSampleApp/Pods-ASDKSampleApp-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
-			outputPaths = (
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ASDKSampleApp/Pods-ASDKSampleApp-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ASDKSampleApp/Pods-ASDKSampleApp-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ASDKSampleApp/Pods-ASDKSampleApp-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		6350D7BD1EF85E2BB386E837 /* [CP] Check Pods Manifest.lock */ = {
@@ -491,28 +496,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ASDKSampleApp-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		A11A4A4A9DD47BEE00292CE2 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ASDKSampleApp/Pods-ASDKSampleApp-frameworks.sh\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -585,12 +578,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -639,12 +634,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -678,9 +675,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 80ADADDCD6F59A2D7EF6C6A3 /* Pods-ASDKSampleApp.debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = ASDKSampleApp/ASDKSampleApp.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 78;
 				DEVELOPMENT_TEAM = 8SEFGGQX9M;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -689,12 +686,16 @@
 					"$(PROJECT_DIR)/ASDKSampleApp/ASDK",
 				);
 				INFOPLIST_FILE = "ASDKSampleApp/Supporting files/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = ru.tcsbank.ASDKSample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "179273f2-bc09-426b-b1e5-b41e5ca91de9";
 				PROVISIONING_PROFILE_SPECIFIER = "ASDKSampleApp Development";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -702,9 +703,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 01788A6283865E9E86DA0E68 /* Pods-ASDKSampleApp.release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = ASDKSampleApp/ASDKSampleApp.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 78;
 				DEVELOPMENT_TEAM = 8SEFGGQX9M;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -713,12 +714,16 @@
 					"$(PROJECT_DIR)/ASDKSampleApp/ASDK",
 				);
 				INFOPLIST_FILE = "ASDKSampleApp/Supporting files/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = ru.tcsbank.ASDKSample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "179273f2-bc09-426b-b1e5-b41e5ca91de9";
 				PROVISIONING_PROFILE_SPECIFIER = "ASDKSampleApp Development";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
